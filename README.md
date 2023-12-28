@@ -1,7 +1,7 @@
 # Predicting TV Show Popularity
 
 ## Overview
-This project, part of ECON-M518 at Indiana University Bloomington, led by Shiva Kumar Pendem, focuses on predicting the popularity of TV shows using Principal Component Regression (PCR). It addresses the challenges posed by multicollinearity in traditional regression methods.
+This project focuses on predicting the popularity of TV shows using Principal Component Regression (PCR). It addresses the challenges posed by multicollinearity in traditional regression methods.
 
 ## Data
 The analysis is based on NBC show details, encompassing Gross Ratings Points (GRP) and Projected Engagement (PE) alongside audience survey responses.
