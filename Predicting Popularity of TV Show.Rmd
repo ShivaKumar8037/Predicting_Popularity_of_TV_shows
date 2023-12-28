@@ -1,0 +1,155 @@
+---
+title: "PCR on shows"
+output: html_notebook
+---
+
+
+```{r}
+library(ggplot2)
+library(dplyr)
+```
+
+
+```{r}
+showDetails <- read.csv('nbc_showdetails.csv')
+pilotSurvey <- read.csv('nbc_pilotsurvey.csv')
+```
+
+```{r}
+showDetails
+```
+
+```{r}
+
+ggplot(showDetails, aes(x = PE, y = GRP, color = Genre)) +
+  geom_point(size = 3) +
+  labs(title = "Comparison of PE and GRP",
+       x = "Projected Engagement (PE)",
+       y = "Gross Rating Points (GRP)") +
+  theme_minimal()
+
+
+```
+```{r}
+pilotSurvey
+```
+
+```{r}
+
+ggplot(pilotSurvey, aes(x = Show)) +
+  geom_bar() +
+  labs(
+    title = "Count of Each Show",
+    x = "Show",
+    y = "Count"
+  ) +
+  theme_minimal() + 
+    theme(axis.text.x = element_text(angle = 45, hjust = 1))
+```
+
+```{r}
+
+
+# Aggregate the data
+survey_agg <- pilotSurvey %>%
+  group_by(Show) %>%
+  summarise(across(matches("Q1_|Q2_"), mean, na.rm = TRUE))
+```
+
+```{r}
+survey_agg
+```
+
+
+```{r}
+
+library(factoextra)
+
+# Perform PCA
+pca_result <- prcomp(survey_agg[, -1], graph = FALSE)
+
+# Print summary of PCA
+summary(pca_result)
+
+fviz_pca_ind(pca_result)
+fviz_pca_var(pca_result)
+```
+
+
+```{r}
+fviz_pca_var(pca_result, col.var = "contrib", 
+             gradient.cols = c("#00AFBB", "#E7B800", "#FC4E07"),
+             repel = TRUE)
+```
+
+### Question 3:
+```{r}
+fviz_pca_biplot(pca_result, label = "var", repel = TRUE)
+```
+
+### Question 4: 
+
+```{r}
+pca_scores <- as.data.frame(pca_result$x)
+```
+
+```{r}
+pca_scores$Show <- as.character(pca_scores$Show)
+show_details$Show <- as.character(show_details$Show)
+```
+
+
+```{r}
+model_data <- merge(pca_scores, showDetails[, c("Show", "PE")], by = "Show")
+
+# Building the model with a selected number of components (e.g., first 2 components)
+model_1 <- lm(PE ~ PC1 + PC2, data = model_data)
+
+# Building another model based on a different selection of components
+model_2 <- lm(PE ~ PC1 + PC2 + PC3, data = model_data) # example with 3 components
+
+# Summarize the models
+summary(model_1)
+summary(model_2)
+```
+
+
+```{r}
+```
+
+
+```{r}
+```
+
+
+```{r}
+```
+
+
+```{r}
+```
+
+
+```{r}
+```
+
+
+```{r}
+```
+
+
+```{r}
+```
+
+
+```{r}
+```
+
+
+```{r}
+```
+
+
+```{r}
+```
+
